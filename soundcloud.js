@@ -32,8 +32,18 @@ const download = async (url, fn) => {
 
 const playlist = async () => {
 
+	/*
+	https://soundcloud.com/nathaniel-williams-6/sets/motor-city-drum-ensemble-1
+	https://soundcloud.com/johnnieromance/sets/motor-city-drum-ensemble-dj-1
+	https://soundcloud.com/nik-go-302352531/sets/related-tracks-hot-since-82
+	https://soundcloud.com/technocathedrale/sets/hot-since-82-top-ten-tracks-2017
+	https://soundcloud.com/cuernavacaciones-vacaciones/sets/related-tracks-friendly-fires
+	https://soundcloud.com/trueromancerec/sets/tensnake-pres-best-of-true
+	https://soundcloud.com/trueromancerec/sets/tensnake-pres-best-of-true-1
+	*/
+
 	const scBaseUrl = 'https://soundcloud.com';
-	const scPlaylistUrl = `${scBaseUrl}/skatebard/sets/original-tracks`;
+	const scPlaylistUrl = `${scBaseUrl}/skatebard/sets/remixes`;
 
 	// function executed in browser
 	function extractItems() {
@@ -43,17 +53,14 @@ const playlist = async () => {
 
 	// scroll & extract
 	async function scrapePlaylist(page, extractItemsFunc, itemTargetCount, scrollDelay = 1000) {
-		let items = [];
+		await page.setDefaultNavigationTimeout(1000);
 		try {
-			let previousHeight;
-			while (items.length < itemTargetCount) {
-				items = await page.evaluate(extractItemsFunc);
-				previousHeight = await page.evaluate('document.body.scrollHeight');
+			for (let i = 0; i < 20; i++) {
 				await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
-				await page.waitForFunction(`document.body.scrollHeight > ${previousHeight}`);
-				await page.waitFor(scrollDelay);
+				await delay(500 + Math.floor(Math.random()*500))
 			}
 		} catch (e) { console.error(e); }
+		const items = await page.evaluate(extractItemsFunc);
 		return items;
 	}
 
