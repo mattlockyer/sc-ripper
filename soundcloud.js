@@ -53,7 +53,7 @@ const playlist = async () => {
 
 	// scroll & extract
 	async function scrapePlaylist(page, extractItemsFunc, itemTargetCount, scrollDelay = 1000) {
-		await page.setDefaultNavigationTimeout(1000);
+		await page.setDefaultNavigationTimeout(10000);
 		try {
 			for (let i = 0; i < 20; i++) {
 				await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
